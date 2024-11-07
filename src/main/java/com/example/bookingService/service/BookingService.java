@@ -2,6 +2,7 @@ package com.example.bookingService.service;
 
 import com.example.bookingService.dto.BookingRequest;
 import com.example.bookingService.dto.SeatDto;
+import com.example.bookingService.feign.ShowTimeClient;
 import com.example.bookingService.model.Booking;
 import com.example.bookingService.model.BookingSeats;
 import com.example.bookingService.model.Seats;
@@ -25,15 +26,24 @@ public class BookingService {
     private BookingSeatsRepository bookingSeatsRepository;
 
     @Autowired
+    private ShowTimeClient showTimeClient;
+
+    @Autowired
     private SeatRepository seatRepository;
 
     public boolean areSeatsAvailable(List<Integer> seatIds, Integer showtimeId, Integer movieId) {
 
-        List<BookingSeats> existingBookings = bookingSeatsRepository.findBySeatIdInAndShowtimeIdAndMovieId(seatIds, showtimeId, movieId);
+        List<BookingSeats> existingBookings = bookingSeatsRepository.findBySeatIdsAndShowtimeIdAndMovieId(seatIds, showtimeId, movieId);
         return existingBookings.isEmpty();
     }
 
     public Booking createBooking(Integer userId, Integer showtimeId, Integer movieId, Integer totalSeats, List<Integer> seatIds) {
+
+        Boolean showtimeExists=showTimeClient.checkIfShowTimeExists(showtimeId).getBody();
+
+        if(showtimeExists==null || !showtimeExists){
+            throw new RuntimeException("Showtime does not exist");
+        }
 
         if (!areSeatsAvailable(seatIds, showtimeId, movieId)) {
             throw new RuntimeException("Some of the seats are already booked.");

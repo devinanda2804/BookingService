@@ -12,7 +12,8 @@ import java.util.List;
 @Repository
 public interface BookingSeatsRepository extends JpaRepository<BookingSeats, Integer> {
 
-    List<BookingSeats> findBySeatIdInAndShowtimeIdAndMovieId(List<Integer> seatIds, Integer showtimeId, Integer movieId);
+    @Query("SELECT bse FROM BookingSeats bse WHERE bse.seat.id IN :seatIds AND bse.showtimeId = :showtimeId AND bse.movieId = :movieId")
+    List<BookingSeats> findBySeatIdsAndShowtimeIdAndMovieId(@Param("seatIds") List<Integer> seatIds, @Param("showtimeId") Integer showtimeId, @Param("movieId") Integer movieId);
 
 
     @Query("SELECT bse.seat.id FROM BookingSeats bse WHERE bse.booking.showtimeId = :showtimeId AND bse.booking.movieId = :movieId")
