@@ -23,17 +23,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/api/admin/movie").hasRole("ADMIN")
+                .antMatchers("/api/bookings/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
-                .httpBasic();
+                .httpBasic();  // Basic authentication enabled
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
-                .withUser("admin")
-                .password(passwordEncoder().encode("admin"))
-                .roles("ADMIN");
+                .withUser("admin")  // Hardcoded user
+                .password(passwordEncoder().encode("admin"))  // Password is "admin"
+                .roles("ADMIN");  // Role assigned
     }
 }

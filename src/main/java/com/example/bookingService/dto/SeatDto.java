@@ -10,4 +10,5 @@ import lombok.NoArgsConstructor;
 public class SeatDto {
     private Integer seatId;
     private String seatName;
+    private Boolean available;
 }

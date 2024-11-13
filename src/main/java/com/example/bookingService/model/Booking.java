@@ -41,7 +41,4 @@ public class Booking {
     @Column(name="total_Amount")
     private Integer totalAmount;
 
-    @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference
-    private List<BookingSeats> bookingSeats = new ArrayList<>();
 }

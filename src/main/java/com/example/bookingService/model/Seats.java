@@ -1,5 +1,6 @@
 package com.example.bookingService.model;
 
+import io.swagger.models.auth.In;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,6 +20,19 @@ public class Seats {
 
     @Column(name = "seat_name", nullable = false, unique = true)
     private String seatName;
+
+    @Column(name="showtime_id")
+    private Integer showtimeId;
+
+    @Column(name="movie_id")
+    private Integer movieId;
+
+    @Column(name="available")
+    private Boolean available;
+
+    @ManyToOne
+    @JoinColumn(name="booking_id",referencedColumnName = "id")
+    private Booking booking;
 
 
 }
