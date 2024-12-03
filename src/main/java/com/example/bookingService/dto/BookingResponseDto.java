@@ -5,6 +5,7 @@ import lombok.Data;
 @Data
 public class BookingResponseDto {
 
+    private Integer id;
     private Integer userId;
     private Integer showtimeId;
 

@@ -1,6 +1,5 @@
 package com.example.bookingService.model;
 
-import io.swagger.models.auth.In;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -77,6 +77,7 @@ public class BookingService {
 
     private BookingResponseDto toBookingResponseDto(Booking booking){
         BookingResponseDto dto=new BookingResponseDto();
+        dto.setId(booking.getId());
         dto.setUserId(booking.getUserId());
         dto.setMovieId(booking.getMovieId());
         dto.setShowtimeId(booking.getShowtimeId());
@@ -134,6 +135,14 @@ public class BookingService {
 
         return seatDtos;
     }
+
+
+        public List<SeatDto> getAllSeatsByShowtimeId(Integer showtimeId) {
+            List<Seats> seats = seatRepository.findByShowtimeId(showtimeId);
+            return seats.stream()
+                    .map(seat -> new SeatDto(seat.getId(), seat.getSeatName(), seat.getAvailable()))
+                    .collect(Collectors.toList());
+        }
 
 
 

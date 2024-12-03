@@ -47,6 +47,12 @@ public class BookingController {
         return bookingService.getAvailableShowtimes(movieId);
     }
 
+    @GetMapping("/all-seats/{showtimeId}")
+    public ResponseEntity<List<SeatDto>> getAllSeatsByShowtimeId(@PathVariable Integer showtimeId) {
+        List<SeatDto> seats = bookingService.getAllSeatsByShowtimeId(showtimeId);
+        return ResponseEntity.ok(seats);
+    }
+
     @GetMapping("/{userId}")
     public ResponseEntity<List<Booking>> getBookings(@PathVariable Integer userId) {
         List<Booking> bookingList = bookingService.getBookings(userId);

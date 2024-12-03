@@ -34,6 +34,7 @@ public interface SeatRepository extends JpaRepository<Seats, Integer> {
 
     List<Seats> findByBookingIdAndAvailable(Integer bookingId, boolean available);
 
+    List<Seats> findByShowtimeId(Integer showtimeId);
 
 
 }

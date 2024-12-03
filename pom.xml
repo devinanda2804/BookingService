@@ -33,6 +33,12 @@
 				<artifactId>spring-boot-starter-thymeleaf</artifactId>
 			</dependency>
 
+			<dependency>
+				<groupId>com.h2database</groupId>
+				<artifactId>h2</artifactId>
+				<scope>test</scope>
+			</dependency>
+
 			<!-- Spring Web -->
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
@@ -50,6 +56,12 @@
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-starter-security</artifactId>
+			</dependency>
+
+			<dependency>
+				<groupId>io.jsonwebtoken</groupId>
+				<artifactId>jjwt</artifactId>
+				<version>0.9.1</version>
 			</dependency>
 
 			<!-- Spring Cloud Dependencies for Eureka and OpenFeign -->
