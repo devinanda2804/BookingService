@@ -10,17 +10,17 @@ public class TokenBlackList {
     @Autowired
     private StringRedisTemplate redisTemplate;
 
-    private static final String BLACKLIST_PREFIX = "blacklist_token:";  // Key prefix for blacklisted tokens
+    private static final String BLACKLIST_PREFIX = "blacklist_token:";
 
     public void blacklistToken(String token) {
-        redisTemplate.opsForValue().set(BLACKLIST_PREFIX + token, "blacklisted");  // Store token in Redis
+        redisTemplate.opsForValue().set(BLACKLIST_PREFIX + token, "blacklisted");
     }
 
     public boolean isTokenBlacklisted(String token) {
-        return redisTemplate.hasKey(BLACKLIST_PREFIX + token);  // Check if token is in Redis
+        return redisTemplate.hasKey(BLACKLIST_PREFIX + token);
     }
 
     public void removeTokenFromBlacklist(String token) {
-        redisTemplate.delete(BLACKLIST_PREFIX + token);  // Remove token from Redis
+        redisTemplate.delete(BLACKLIST_PREFIX + token);
     }
 }
