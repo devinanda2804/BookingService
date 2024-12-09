@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface BookingRepository extends JpaRepository<Booking, Integer> {
@@ -19,5 +20,9 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
     @Transactional
     @Query("UPDATE Booking b SET b.status = :status WHERE b.id = :bookingId")
     void updateBookingStatus(@Param("bookingId") Integer bookingId, @Param("status") String status);
+
+    List<Booking> findAllByStatusAndCreatedAtBefore(String status, LocalDateTime time);
+
+
 
 }

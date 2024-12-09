@@ -1,10 +1,13 @@
 package com.example.bookingService.repository;
 
+import com.example.bookingService.model.Booking;
 import com.example.bookingService.model.Seats;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,6 +38,10 @@ public interface SeatRepository extends JpaRepository<Seats, Integer> {
     List<Seats> findByBookingIdAndAvailable(Integer bookingId, boolean available);
 
     List<Seats> findByShowtimeId(Integer showtimeId);
+
+    List<Seats> findAllByBookingId(Integer bookingId);
+
+
 
 
 }

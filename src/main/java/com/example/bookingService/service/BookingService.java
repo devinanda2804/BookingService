@@ -9,15 +9,20 @@ import com.example.bookingService.model.Seats;
 import com.example.bookingService.repository.BookingRepository;
 import com.example.bookingService.repository.SeatRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+import lombok.extern.slf4j.Slf4j;
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+
+@Slf4j
 @Service
 public class BookingService {
 
@@ -51,6 +56,8 @@ public class BookingService {
         Booking booking = new Booking();
         booking.setUserId(userId);
         booking.setShowtimeId(showtimeId);
+
+
         booking.setMovieId(movieId);
         booking.setStatus("PENDING");
         booking.setTotalSeats(totalSeats);
@@ -67,7 +74,9 @@ public class BookingService {
         seatIds.forEach(seatId -> {
             Seats seat = seatRepository.findByIdAndShowtimeIdAndMovieId(seatId, showtimeId, movieId)
                     .orElseThrow(() -> new RuntimeException("Seat not found"));
+
             seat.setAvailable(false);
+
             seat.setBooking(finalBooking);
             seatRepository.save(seat);
         });
@@ -88,6 +97,41 @@ public class BookingService {
 
         return dto;
     }
+
+
+    @Scheduled(fixedRate = 60000)
+    public void clearPendingBookings() {
+        try {
+            LocalDateTime expiryThreshold = LocalDateTime.now().minusMinutes(2);
+            log.info("Clearing pending bookings older than: {}", expiryThreshold);
+
+            List<Booking> pendingBookings = bookingRepository.findAllByStatusAndCreatedAtBefore(
+                    "PENDING", expiryThreshold
+            );
+
+            for (Booking booking : pendingBookings) {
+                log.info("Processing booking ID: {}", booking.getId());
+
+
+                List<Seats> seats = seatRepository.findAllByBookingId(booking.getId());
+                for (Seats seat : seats) {
+                    seat.setAvailable(true);
+                }
+                seatRepository.saveAll(seats);
+
+
+                booking.setStatus("CANCELLED");
+                bookingRepository.save(booking);
+
+                log.info("Cancelled booking ID: {}", booking.getId());
+            }
+        } catch (Exception e) {
+            log.error("Error while clearing pending bookings: ", e);
+        }
+    }
+
+
+
 
 
     public List<ShowtimeAvailabilityDTO> getAvailableShowtimes(Integer movieId) {
